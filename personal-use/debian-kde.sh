@@ -20,7 +20,7 @@ sudo apt update
 
 
 # Install required tools
-sudo apt install vlc firefox-devedition adb keepassxc zram-tools partitionmanager btop htop lynx brasero default-jre wget curl nano git systemd-timesyncd ufw gufw apache2 bind9 linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 intel-media-va-driver-non-free flatpak plasma-discover-backend-flatpak -y
+sudo apt install vlc firefox-devedition adb keepassxc zram-tools partitionmanager btop htop lynx brasero default-jre wget curl nano git systemd-timesyncd ufw gufw apache2 bind9 linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 intel-media-va-driver-non-free flatpak plasma-discover-backend-flatpak fastfetch -y
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub io.missioncenter.MissionCenter
 
