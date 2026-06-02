@@ -3,6 +3,7 @@
 # env is debian based Linux
 
 # add latest firefox repo
+sudo apt update
 sudo install -d -m 0755 /etc/apt/keyrings
 sudo apt-get install wget -y
 wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
@@ -19,7 +20,9 @@ sudo apt update
 
 
 # Install required tools
-sudo apt install vlc firefox adb keepassxc zram-tools partitionmanager btop htop lynx brasero default-jre wget curl nano git systemd-timesyncd ufw gufw apache2 bind9 linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 -y
+sudo apt install vlc firefox-devedition adb keepassxc zram-tools partitionmanager btop htop lynx brasero default-jre wget curl nano git systemd-timesyncd ufw gufw apache2 bind9 linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 intel-media-va-driver-non-free flatpak plasma-discover-backend-flatpak -y
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub io.missioncenter.MissionCenter
 
 # install protonvpn
 wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb && sudo dpkg -i ./protonvpn-stable-release_*_all.deb && sudo rm protonvpn-stable-release_*_all.deb && sudo apt update && sudo apt install proton-vpn-gnome-desktop -y
@@ -50,10 +53,23 @@ timedatectl set-local-rtc 1
 cd /home/alif/D_DRIVE/Linux/Packages/
 sudo apt install ./*.deb
 
-# add gh desktop repo
+# add gh desktop repo and install
 sudo curl https://gpg.polrivero.com/public.key | sudo gpg --dearmor -o /usr/share/keyrings/polrivero.gpg
 echo "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/polrivero.gpg] https://deb.github-desktop.polrivero.com/ stable main" | sudo tee /etc/apt/sources.list.d/github-desktop-plus.list
 sudo apt update && sudo apt install github-desktop-plus -y
+
+# add vscode repo and install
+sudo apt install wget gpg &&
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft.gpg
+cat <<EOF | sudo tee /etc/apt/sources.list.d/code.sources
+Types: deb
+URIs: https://packages.microsoft.com/repos/code
+Suites: stable
+Components: main
+Architectures: amd64,arm64,armhf
+Signed-By: /usr/share/keyrings/microsoft.gpg
+EOF
+sudo apt install --update code # or code-insiders
 
 # install vmware-workstation
 sudo ./VM*
