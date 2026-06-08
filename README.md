@@ -1,8 +1,9 @@
 # Linux Post-Install scripts
+This project aims to make Linux workstation setup faster, but also more secure for both home and and education usage
 
 ## Features
 - One-click installation, Just copy-paste command on Terminal
-- Automates installation of daily driver apps and Microsoft fonts
+- Automates installation of daily-usage apps and Microsoft fonts
 - Adding App Shortcut to Desktop for easy access
 - Enable Firewall
 - Enable [zram](https://wiki.archlinux.org/title/Zram)
@@ -22,15 +23,15 @@ Just copy-paste the commands to your terminal and execute. The script will autom
 
 - Linux Mint Cinnamon, Linux Mint MATE, and Linux Mint Debian Edition
 
-      wget https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/linuxmint/cinnamon.sh && sh cinnamon.sh && rm cinnamon.sh
-
+      curl -fssL https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/linuxmint/cinnamon.sh | bash
+  
 - Linux Mint XFCE
 
-      wget https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/linuxmint/xfce.sh && sh xfce.sh && rm xfce.sh
+      curl -fssL https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/linuxmint/xfce.sh | bash
 
-- Kubuntu or Debian KDE, with snapd disabled and comfy tools (if you want Linux mint feelings with KDE Plasma desktop)
+- Kubuntu or Debian KDE, with snapd disabled and comfy tools (if you want Linux mint feelings and feature, but with KDE Plasma desktop)
 
-      wget https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/debian/minty-kde.sh && sh minty-kde.sh && rm minty-kde.sh
+      curl -fssL https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/debian/minty-kde.sh | bash
 
 ## All Debian-based distribution, but without shortcut to desktop
 
@@ -46,7 +47,7 @@ Works on:
 - Q4OS
 - And many more!
 
-      wget https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/debian/debian.sh && sh debian.sh && rm debian.sh
+      curl -fssL https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/debian/debian.sh | bash
 
 ## Enable swap manually if not enabled by default (4GB is default size)
 
