@@ -64,7 +64,7 @@ EOF
 echo 'Done'
 
 # Install required tools
-sudo apt install vlc firefox-devedition torbrowser-launcher keepassxc adb zram-tools partitionmanager btop htop lynx brasero default-jre wget curl nano git systemd-timesyncd ufw gufw apache2 bind9 simplescreenrecorder linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 -y
+sudo apt install vlc firefox torbrowser-launcher keepassxc adb zram-tools partitionmanager btop htop lynx brasero default-jre wget curl nano git systemd-timesyncd ufw gufw apache2 bind9 simplescreenrecorder linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 kamoso kclock -y
 
 # install protonvpn
 wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb && sudo dpkg -i ./protonvpn-stable-release_*_all.deb && sudo rm protonvpn-stable-release_*_all.deb && sudo apt update && sudo apt install proton-vpn-gnome-desktop -y
@@ -111,6 +111,29 @@ Architectures: amd64,arm64,armhf
 Signed-By: /usr/share/keyrings/microsoft.gpg
 EOF
 sudo apt update && sudo apt install code # or code-insiders
+
+# install docker engine
+# Add Docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update && sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo systemctl enable docker
+sudo systemctl start docker
 
 # install vmware-workstation
 sudo ./VM*
@@ -177,18 +200,3 @@ sudo fallocate -l 4G /swapfile1 && sudo chmod 600 /swapfile1 && sudo mkswap /swa
 
 # remove unnecessary package
 sudo apt purge libreoffice* thunderbird gimp konqueror juk dragonplayer kmail akregator -y
-
-# install nodejs lts
-# Download and install nvm:
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
-# in lieu of restarting the shell
-\. "$HOME/.nvm/nvm.sh"
-# Download and install Node.js:
-nvm install lts/*
-# Verify the Node.js version:
-node -v # Should print "v24.15.0".
-# Download and install Yarn:
-corepack enable yarn
-# Verify Yarn version:
-yarn -v
-npm install -g http-server

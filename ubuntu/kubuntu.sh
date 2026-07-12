@@ -2,21 +2,12 @@
 
 # If you want Linux Mint feelings with KDE Plasma desktop, here it is
 # Installing all comfy tools that linux mint have built-in
-# works for both Kubuntu and Debian KDE
 # snapd is banned and disabled
 # Updating package database
 
 # disabling snapd
 echo "Disabling snapd"
-wget https://github.com/arfshl/no-snap-on-apt/raw/main/nosnap.sh && sudo sh nosnap.sh && rm nosnap.sh
-
-# configuring thunderbird deb for Kubuntu
-sudo add-apt-repository ppa:mozillateam/ppa -y
-cat <<EOF | sudo tee /etc/apt/preferences.d/thunderbird
-Package: thunderbird
-Pin: release o=Ubuntu
-Pin-Priority: -1
-EOF
+curl -fssL https://raw.githubusercontent.com/arfshl/nosnap/main/nosnap.sh | sudo bash
 
 echo "Updating package database..."
 sudo apt update
@@ -61,28 +52,13 @@ chmod -R 755 $HOME/Desktop/
 echo "Spotify Client Installed"
 
 # Install VLC, UFW, GUFW, systemd-resolved, ttf-mscorefonts firefox
-echo "installing firefox..."
-sudo install -d -m 0755 /etc/apt/keyrings
-cat <<EOF | sudo tee /etc/apt/sources.list.d/mozilla.sources
-Types: deb
-URIs: https://packages.mozilla.org/apt
-Suites: mozilla
-Components: main
-Signed-By: /etc/apt/keyrings/packages.mozilla.org.asc
-EOF
-
-cat <<EOF | sudo tee /etc/apt/preferences.d/mozilla
-Package: *
-Pin: origin packages.mozilla.org
-Pin-Priority: 1000
-EOF
-
 sudo apt update
 echo "Installing System Tools..."
 echo "Installing VLC..."
+echo "installing firefox..."
 echo "Installing Microsoft fonts..."
 echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
-sudo apt install vlc ttf-mscorefonts-installer cheese gnome-clocks mtp-tools firefox -y
+sudo apt install vlc ttf-mscorefonts-installer kamoso kclock mtp-tools firefox -y
 sudo apt purge firefox-esr -y
 xdg-mime default vlc.desktop video/mp4
 xdg-mime default vlc.desktop video/x-matroska
@@ -127,5 +103,5 @@ echo 'vm.page-cluster = 0' | sudo tee -a /etc/sysctl.conf
 echo 'Binary::apt::Pager "false";' | sudo tee -a  /etc/apt/apt.conf.d/99nopager
 
 # Done Process
-echo "Welcome to Debian!"
+echo "Welcome to Kubuntu!"
 echo "To apply zram configuration, please reboot"

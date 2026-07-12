@@ -14,12 +14,14 @@ This project aims to make Linux workstation setup faster, but also more secure f
 - [OnlyOffice](https://www.onlyoffice.com/download-desktop.aspx) as Microsoft Office replacement, but you can still access Office Online or Google Workspaces via web browser
 - VLC Media Player
 - Spotify Linux Client
-- GNOME Cheese (Camera App)
-- GNOME Clocks
+- GNOME Cheese/Kamoso (Camera App)
+- GNOME Clocks/KClock (Clock App)
 - Microsoft Corefonts (with `ttf-mscorefonts-installer` packages)
 
 ## Usage
 Just copy-paste the commands to your terminal and execute. The script will automatically downloaded and executed
+
+#### Linux Mint
 
 - Linux Mint Cinnamon, Linux Mint MATE, and Linux Mint Debian Edition
 
@@ -29,11 +31,20 @@ Just copy-paste the commands to your terminal and execute. The script will autom
 
       curl -fssL https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/linuxmint/xfce.sh | bash
 
-- Kubuntu or Debian KDE, with snapd disabled and comfy tools (if you want Linux mint feelings and feature, but with KDE Plasma desktop)
+#### Ubuntu (with snap blocked ofcourse)
 
-      curl -fssL https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/debian/minty-kde.sh | bash
+- Kubuntu 
 
-## All Debian-based distribution, but without shortcut to desktop
+      curl -fssL https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/ubuntu/kubuntu.sh | bash
+
+#### Debian
+
+- Debian KDE
+  
+      curl -fssL https://raw.githubusercontent.com/arfshl/linuxmint-postinstall/refs/heads/main/debian/debian-kde.sh | bash
+
+
+#### All Debian-based distribution, but without shortcut to desktop
 
 Works on:
 - All Ubuntu and Debian flavor and desktop
