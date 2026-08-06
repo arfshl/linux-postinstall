@@ -1,6 +1,8 @@
 # Linux Post-Install scripts
 This project aims to make Linux workstation setup faster, but also more secure for both home and and education usage
 
+Looks for [Windows version](https://github.com/arfshl/windows-postinstall)?
+
 ## Features
 - One-click installation, Just copy-paste command on Terminal
 - Automates installation of daily-usage apps and Microsoft fonts
