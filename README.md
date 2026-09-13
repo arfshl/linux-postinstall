@@ -65,6 +65,10 @@ Works on:
 ## Enable swap manually if not enabled by default (4GB is default size)
 
       sudo fallocate -l 4G /swapfile1 && sudo chmod 600 /swapfile1 && sudo mkswap /swapfile1 && sudo swapon /swapfile1 && echo '/swapfile1 none swap sw 0 0' | sudo tee -a /etc/fstab
+      
+#### For btrfs user (e.g fedora and opensuse) use this command to enable swap
+
+      sudo touch /swapfile1 && sudo chattr +C /swapfile1 && sudo dd if=/dev/zero of=/swapfile1 bs=1M count=4096 status=progress && sudo chmod 600 /swapfile1 && sudo mkswap /swapfile1 && sudo swapon /swapfile1 && echo '/swapfile1 none swap sw 0 0' | sudo tee -a /etc/fstab
 
 ## VMware Tools
 
