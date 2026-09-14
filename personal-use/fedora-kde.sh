@@ -15,6 +15,7 @@ sudo dnf install vlc vlc-plugins-freeworld ffmpeg intel-media-driver libdvdcss m
 # libva-intel-driver libva-nvidia-driver libva-nvidia-driver.{i686,x86_64}
 sudo dnf install @development-tools
 curl -LO https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+sudo dnf install curl cabextract xorg-x11-font-utils fontconfig -y
 sudo rpm -ivh --nodigest --nofiledigest ./msttcore-fonts-installer-2.6-1.noarch.rpm
 fc-cache -f -v
 # mark as user installed
