@@ -14,7 +14,9 @@ sudo dnf install android-tools libayatana-appindicator-gtk3 keepassxc firefox ka
 sudo dnf install vlc vlc-plugins-freeworld ffmpeg intel-media-driver libdvdcss mesa-va-drivers-freeworld mesa-va-drivers-freeworld.i686 mesa-vdpau-drivers-freeworld mesa-vulkan-drivers-freeworld qt5-qtwebengine-freeworld telegram-desktop --allowerasing -y
 # libva-intel-driver libva-nvidia-driver libva-nvidia-driver.{i686,x86_64}
 sudo dnf install @development-tools
-
+curl -LO https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+sudo rpm -ivh --nodigest --nofiledigest ./msttcore-fonts-installer-2.6-1.noarch.rpm
+fc-cache -f -v
 # mark as user installed
 sudo dnf mark user java-25-openjdk-headless -y
 
