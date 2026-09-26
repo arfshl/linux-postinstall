@@ -82,7 +82,7 @@ sudo apt install systemd-resolved -y
 echo "Enabling Encrypted DNS..."
 sudo tee -a /etc/systemd/resolved.conf > /dev/null <<EOF
 DNS=1.1.1.1#cloudflare-dns.com
-FallbackDNS=8.8.8.8#dns.google
+FallbackDNS=76.76.2.0#p0.freedns.controld.com
 DNSOverTLS=yes
 Domains=~.
 ReadEtcHosts=yes
@@ -91,17 +91,29 @@ EOF
 sudo systemctl enable systemd-resolved 
 sudo systemctl restart systemd-resolved
 
-# Enable zram with lz4 compression algorithm
-echo "Installing zram-tools..."
-sudo apt install zram-tools -y
+# Enable zram with zstd compression algorithm
+echo "Installing systemd-zram-generator ..."
+sudo apt install systemd-zram-generator -y
 echo "Enabling zram..."
-echo 'ALGO=lz4
-PERCENT=50' | sudo tee -a /etc/default/zramswap
-echo 'vm.page-cluster = 0' | sudo tee -a /etc/sysctl.conf
+[ -f /usr/lib/systemd/zram-generator.conf ] && sudo rm /usr/lib/systemd/zram-generator.conf
+sudo tee -a /usr/lib/systemd/zram-generator.conf > /dev/null <<EOF
+[zram0]
+zram-size = min(ram, 16384)
+compression-algorithm = zstd
+EOF
+
+sudo tee -a /etc/sysctl.d/99-vm-zram-parameters.conf > /dev/null <<EOF
+vm.swappiness = 100
+vm.watermark_boost_factor = 0
+vm.watermark_scale_factor = 62
+vm.page-cluster = 0
+EOF
+
+sudo sysctl --system > /dev/null
+sudo systemctl restart systemd-zram-setup@zram0.service
 
 # Disable apt Pager at Debian 13 or Ubuntu 26.04
 echo 'Binary::apt::Pager "false";' | sudo tee -a  /etc/apt/apt.conf.d/99nopager
 
 # Done Process
 echo "Welcome to Kubuntu!"
-echo "To apply zram configuration, please reboot"
