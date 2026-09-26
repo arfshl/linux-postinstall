@@ -10,7 +10,7 @@ sudo dnf config-manager addrepo --id=mozilla --set=baseurl=https://packages.mozi
 sudo dnf makecache --refresh
 
 # install package
-sudo dnf install android-tools libayatana-appindicator-gtk3 keepassxc firefox kate btop htop git java-25-openjdk-headless torbrowser-launcher dnsutils httpd kernel-devel kernel-headers -y
+sudo dnf install android-tools libayatana-appindicator-gtk3 keepassxc firefox kate btop htop git java-25-openjdk-headless torbrowser-launcher dnsutils httpd kernel-devel kernel-headers gnome-extensions-app -y
 sudo dnf install vlc vlc-plugins-freeworld ffmpeg intel-media-driver libdvdcss mesa-va-drivers-freeworld mesa-va-drivers-freeworld.i686 mesa-vdpau-drivers-freeworld mesa-vulkan-drivers-freeworld qt5-qtwebengine-freeworld telegram-desktop --allowerasing -y
 # libva-intel-driver libva-nvidia-driver libva-nvidia-driver.{i686,x86_64}
 sudo dnf install @development-tools
@@ -39,6 +39,9 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 # install fnm
 curl -fsSL https://fnm.vercel.app/install | bash
 fnm install lts/*
+
+# install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # install protonvpn
 wget "https://repo.protonvpn.com/fedora-$(cat /etc/fedora-release | cut -d' ' -f 3)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.3-1.noarch.rpm" && sudo dnf install ./protonvpn-stable-release-1.0.3-1.noarch.rpm && sudo dnf check-update --refresh  && sudo dnf install proton-vpn-gnome-desktop 
