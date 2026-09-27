@@ -103,3 +103,9 @@ sudo systemctl restart systemd-zram-setup@zram0.service
 
 # enable 4gb swap
 sudo touch /swapfile1 && sudo chattr +C /swapfile1 && sudo dd if=/dev/zero of=/swapfile1 bs=1M count=4096 status=progress && sudo chmod 600 /swapfile1 && sudo mkswap /swapfile1 && sudo swapon /swapfile1 && echo '/swapfile1 none swap sw 0 0' | sudo tee -a /etc/fstab
+
+# disable scaling for legacy apps
+gsettings set org.gnome.mutter.wayland xwayland-scaling-factor 1
+
+# enable scaling for legacy apps
+gsettings set org.gnome.mutter.wayland xwayland-scaling-factor 0
