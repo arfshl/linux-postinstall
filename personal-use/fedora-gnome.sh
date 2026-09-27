@@ -80,7 +80,7 @@ sudo firewall-cmd --permanent --add-port=21118/udp
 sudo firewall-cmd --reload
 
 # install fdm localsend and flatseal flatpak
-flatpak install org.localsend.localsend_app org.freedownloadmanager.Manager com.github.tchx84.Flatseal
+flatpak install flathub org.localsend.localsend_app org.freedownloadmanager.Manager com.github.tchx84.Flatseal
 
 # enhance zram
 echo "Enabling zram..."
