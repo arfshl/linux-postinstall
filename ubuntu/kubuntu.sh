@@ -58,7 +58,7 @@ echo "Installing VLC..."
 echo "installing firefox..."
 echo "Installing Microsoft fonts..."
 echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
-sudo apt install vlc ttf-mscorefonts-installer kamoso kclock mtp-tools firefox -y
+sudo apt install vlc ttf-mscorefonts-installer kamoso kclock mtp-tools firefox software-properties-common software-properties-gtk -y
 sudo apt purge firefox-esr -y
 xdg-mime default vlc.desktop video/mp4
 xdg-mime default vlc.desktop video/x-matroska

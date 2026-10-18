@@ -40,7 +40,7 @@ EOF
 echo 'Done'
 
 # Install required tools
-sudo apt install vlc firefox-devedition adb btop htop lynx brasero wget curl nano git systemd-timesyncd gedit ufw gufw obs-studio systemd-zram-generator linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 fastfetch -y
+sudo apt install vlc firefox-devedition adb btop htop lynx brasero wget curl nano git systemd-timesyncd gedit ufw gufw obs-studio systemd-zram-generator linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 fastfetch software-properties-common software-properties-gtk libssl3 -y
 
 # disable apt pager
 echo 'Binary::apt::Pager "false";' | sudo tee -a  /etc/apt/apt.conf.d/99nopager
