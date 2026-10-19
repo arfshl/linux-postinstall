@@ -1,8 +1,10 @@
 #!/bin/sh
-# this is my personal customization for the applist
-# do aftermount only
-# env is mint Cinnamon:
 
+# env is ubuntu gnome
+# do aftermount only
+
+
+# add latest firefox, thunderbird and keepassxc ppa
 sudo apt update
 sudo install -d -m 0755 /etc/apt/keyrings
 sudo apt-get install wget -y
@@ -14,28 +16,31 @@ Suites: mozilla
 Components: main
 Signed-By: /etc/apt/keyrings/packages.mozilla.org.asc
 EOF
-sudo add-apt-repository ppa:phoerious/keepassxc -y
+
+# no snap installation or enforcing
+echo 'Configuring APT Pinning...'
+sudo tee /etc/apt/preferences.d/nativeapt > /dev/null <<EOF
+Package: firefox
+Pin: release o=Ubuntu
+Pin-Priority: -1
+
+Package: thunderbird
+Pin: release o=Ubuntu
+Pin-Priority: -1
+
+Package: chromium-browser
+Pin: release o=Ubuntu
+Pin-Priority: -1
+
+Package: snapd
+Pin: release o=Ubuntu
+Pin-Priority: -1
+EOF
+
+echo 'Done'
 
 # Install required tools
-sudo apt install vlc firefox-devedition torbrowser-launcher mate-terminal keepassxc adb zram-tools partitionmanager btop htop lynx brasero default-jre wget curl nano git systemd-timesyncd ufw gufw apache2 bind9 simplescreenrecorder linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 -y
-
-# install protonvpn
-wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb && sudo dpkg -i ./protonvpn-stable-release_*_all.deb && sudo rm protonvpn-stable-release_*_all.deb && sudo apt update && sudo apt install proton-vpn-gnome-desktop -y
-
-# generate custom grub config (disable os-prober, block kvm module, amoled black grub wallpaper, and enable verbose boot)
-# cp /home/alif/D_DRIVE/Linux/Packages/1.png /home/alif/1.png
-sudo mv /etc/default/grub /etc/default/grub.bak
-sudo tee /etc/default/grub > /dev/null <<EOF
-GRUB_DEFAULT=0
-GRUB_TIMEOUT=-1
-GRUB_DISTRIBUTOR='Ubuntu'
-#GRUB_CMDLINE_LINUX_DEFAULT='quiet splash'
-#GRUB_CMDLINE_LINUX_DEFAULT='kvm.enable_virt_at_load=0'
-GRUB_CMDLINE_LINUX_DEFAULT=''
-GRUB_CMDLINE_LINUX=""
-GRUB_DISABLE_OS_PROBER=false
-EOF
-sudo update-grub
+sudo apt install vlc firefox-devedition adb btop htop lynx brasero wget curl nano git systemd-timesyncd gedit ufw gufw obs-studio systemd-zram-generator linux-headers-$(uname -r) build-essential libayatana-appindicator3-1 fastfetch software-properties-common software-properties-gtk libssl3 zsh zsh-autosuggestions zsh-syntax-highlighting -y
 
 # disable apt pager
 echo 'Binary::apt::Pager "false";' | sudo tee -a  /etc/apt/apt.conf.d/99nopager
@@ -45,12 +50,12 @@ sudo timedatectl set-local-rtc 1
 
 # install all local .deb apps
 cd /home/alif/D_DRIVE/Linux/Packages/
-sudo apt install ./*.deb -y
+sudo apt install ./*.deb
 
 # add gh desktop repo
 sudo curl https://gpg.polrivero.com/public.key | sudo gpg --dearmor -o /usr/share/keyrings/polrivero.gpg
 echo "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/polrivero.gpg] https://deb.github-desktop.polrivero.com/ stable main" | sudo tee /etc/apt/sources.list.d/github-desktop-plus.list
- sudo apt update && sudo apt install github-desktop-plus -y
+sudo apt update && sudo apt install github-desktop-plus -y
 
 # add vscode repo and install
 sudo apt install wget gpg &&
@@ -63,7 +68,40 @@ Components: main
 Architectures: amd64,arm64,armhf
 Signed-By: /usr/share/keyrings/microsoft.gpg
 EOF
-sudo apt update && sudo apt install code -y # or code-insiders
+sudo apt update && sudo apt install code # or code-insiders
+
+# install docker engine
+# Add Docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update && sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo systemctl enable docker
+sudo systemctl start docker
+
+# install fnm
+curl -fsSL https://fnm.vercel.app/install | bash
+source /home/alif/.bashrc
+
+fnm install lts/*
+
+# install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.local/bin/env
 
 # install vmware-workstation
 sudo ./VM*
@@ -72,37 +110,6 @@ sudo ./VM*
 cd
 cp -r /home/alif/D_DRIVE/Linux/Applications /home/alif/Applications
 
-# Enable powertunnel services
-cd /home/alif/Applications/PowerTunnel/
-sudo cp /home/alif/Applications/PowerTunnel/powertunnel.service /etc/systemd/system/powertunnel.service
-sudo systemctl enable powertunnel
-sudo systemctl start powertunnel
-
-# Enable AdGuardHome
-sudo systemctl stop named
-sudo systemctl disable named
-sudo systemctl stop systemd-resolved
-sudo systemctl disable systemd-resolved
-cd /home/alif/Applications/AdGuardHome
-sudo ./AdGuardHome -s install
-sudo systemctl start AdGuardHome
-
-# disable networkmanager management for /etc/resolv.conf
-#sudo tee /etc/NetworkManager/conf.d/nodns.conf > /dev/null <<EOF
-#[main]
-#dns=none
-#EOF
-
-# rewrite /etc/resolv.conf
-sudo mv /etc/resolv.conf /etc/resolv.conf.bak
-echo 'nameserver 127.0.0.1' | sudo tee -a /etc/resolv.conf
-
-# disable networkmanager management for /etc/resolv.conf
-sudo tee /etc/NetworkManager/conf.d/nodns.conf > /dev/null <<EOF
-[main]
-dns=none
-EOF
-sudo systemctl restart NetworkManager
 
 # Enable UFW, Profile default, Deny incoming, Allow outgoing
 echo "Updating Firewall..."
@@ -114,67 +121,38 @@ sudo ufw enable
 sudo ufw status verbose
 sudo ufw allow 53317/tcp
 sudo ufw allow 53317/udp
+sudo ufw allow 21118/tcp
+sudo ufw allow 21118/udp
 
-# Enable zram with lz4 compression algorithm
-echo "Installing zram-tools..."
-sudo apt install zram-tools -y
+# enhance zram
 echo "Enabling zram..."
-echo 'ALGO=lz4
-PERCENT=50' | sudo tee -a /etc/default/zramswap
-echo 'vm.page-cluster = 0' | sudo tee -a /etc/sysctl.conf
+sudo tee -a /run/systemd/zram-generator.conf > /dev/null <<EOF
+[zram0]
+zram-size = min(ram, 16384)
+compression-algorithm = zstd
+EOF
+
+sudo tee -a /etc/sysctl.d/99-vm-zram-parameters.conf > /dev/null <<EOF
+vm.swappiness = 100
+vm.watermark_boost_factor = 0
+vm.watermark_scale_factor = 62
+vm.page-cluster = 0
+EOF
+
+sudo sysctl --system > /dev/null
+sudo systemctl restart systemd-zram-setup@zram0.service
+
+# use native ntfsplus driver
+sudo apt remove ntfs-3g
+sudo dpkg-divert --package local --rename --add /sbin/mount.ntfs
+sudo apt install mint-meta-cinnamon mint-meta-core mintstick ntfs-3g
+echo 'defaults,uid=1000,gid=1000,fmask=0000,dmask=0022,windows_names,noatime'
+
+sudo tee /etc/udisks2/mount_options.conf > /dev/null <<EOF
+[defaults]
+ntfs_defaults=uid=$UID,gid=$GID
+EOF
 
 # Enable swapfile with 4GB of size
 sudo fallocate -l 4G /swapfile1 && sudo chmod 600 /swapfile1 && sudo mkswap /swapfile1 && sudo swapon /swapfile1 && echo '/swapfile1 none swap sw 0 0' | sudo tee -a /etc/fstab
 
-# remove unnecessary package
-sudo apt purge libreoffice* gimp konqueror juk dragonplayer kmail firefox akregator -y
-
-#  install nodejs lts
-# Download and install nvm:
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
-# in lieu of restarting the shell
-\. "$HOME/.nvm/nvm.sh"
-# Download and install Node.js:
-nvm install lts/*
-# Verify the Node.js version:
-node -v # Should print "v24.15.0".
-# Download and install Yarn:
-corepack enable yarn
-# Verify Yarn version:
-yarn -v
-npm install -g http-server
-
-# install weathr rust app
-sudo apt install rustup
-rustup toolchain install stable
-cargo install weathr
-sudo ln -s /home/alif/.cargo/bin/weathr /usr/bin/weathr
-mkdir -p /home/alif/.config/weathr/
-tee /home/alif/.config/weathr/config.toml > /dev/null <<EOF
-# Hide the HUD (Heads Up Display) with weather details
-hide_hud = false
-
-# Run silently without startup messages (errors still shown)
-silent = false
-
-[location]
-# Location coordinates (overridden if auto = true)
-latitude = -3.6486
-longitude = 103.771
-
-# Auto-detect location via IP (defaults to true if config missing)
-auto = false
-
-# Hide the location name in the UI
-hide = false
-
-[units]
-# Temperature unit: "celsius" or "fahrenheit"
-temperature = "celsius"
-
-# Wind speed unit: "kmh", "ms", "mph", or "kn"
-wind_speed = "kmh"
-
-# Precipitation unit: "mm" or "inch"
-precipitation = "mm"
-EOF

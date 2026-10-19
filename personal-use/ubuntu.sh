@@ -116,8 +116,7 @@ sudo ufw allow 21118/udp
 
 # enhance zram
 echo "Enabling zram..."
-[ -f /usr/lib/systemd/zram-generator.conf ] && sudo rm /usr/lib/systemd/zram-generator.conf
-sudo tee -a /usr/lib/systemd/zram-generator.conf > /dev/null <<EOF
+sudo tee -a /run/systemd/zram-generator.conf > /dev/null <<EOF
 [zram0]
 zram-size = min(ram, 16384)
 compression-algorithm = zstd
@@ -137,6 +136,11 @@ sudo systemctl restart systemd-zram-setup@zram0.service
 sudo apt remove ntfs-3g
 sudo systemctl daemon-reload
 echo 'defaults,uid=1000,gid=1000,fmask=0000,dmask=0022,windows_names,noatime'
+
+sudo tee /etc/udisks2/mount_options.conf > /dev/null <<EOF
+[defaults]
+ntfs_defaults=uid=$UID,gid=$GID
+EOF
 
 # Enable swapfile with 4GB of size
 sudo fallocate -l 4G /swapfile1 && sudo chmod 600 /swapfile1 && sudo mkswap /swapfile1 && sudo swapon /swapfile1 && echo '/swapfile1 none swap sw 0 0' | sudo tee -a /etc/fstab

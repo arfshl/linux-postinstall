@@ -1,0 +1,99 @@
+# Local bin environment setup (Loaded at start)
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+# ==========================================
+# HISTORY SETTINGS
+# ==========================================
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=2000
+setopt appendhistory
+setopt sharehistory
+
+# ==========================================
+# CORE TERMINAL SETTINGS
+# ==========================================
+# Enable extended globbing (similar to Bash globstar **)
+setopt extendedglob
+
+# Make less more friendly for non-text input files
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# Set title for xterm/rxvt terminals
+case "$TERM" in
+    xterm*|rxvt*)
+        precmd() { print -Pn "\e]0;%n@%m: %~\a" }
+        ;;
+esac
+
+# ==========================================
+# PROMPT COLOR CAPABILITY & SETUP
+# ==========================================
+# Enable Zsh's native color system
+autoload -Uz colors && colors
+
+# Default behavior: Enable color prompt if the terminal supports 256color/xterm
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# If color is supported, set your custom bold and colored prompt
+if [ "$color_prompt" = yes ]; then
+    # Format: user@mint ~/dir % (Bold, Green, White, Cyan, Blue)
+    PROMPT='%B%F{green}%n@%m%f%F{white}:%f%B%F{blue}%~%f%b %F{white}%%%f '
+else
+    # Plain text fallback prompt if terminal doesn't support color
+    PROMPT='%n@%m %~ %% '
+fi
+unset color_prompt
+
+# ==========================================
+# ALIASES & COLOR SUPPORT
+# ==========================================
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Alert alias for long running commands
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(fc -ln -1)"'
+
+# Load custom external aliases if they exist
+if [ -f ~/.zsh_aliases ]; then
+    . ~/.zsh_aliases
+elif [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# ==========================================
+# COMPLETION SETTINGS (Zsh Native)
+# ==========================================
+autoload -Uz compinit
+compinit
+
+# ==========================================
+# EXTERNAL TOOLS & PATHS (fnm / env)
+# ==========================================
+# Fast Node Manager (fnm)
+FNM_PATH="/home/alif/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+    export PATH="$FNM_PATH:$PATH"
+    eval "$(fnm env --shell zsh)"
+fi
+
+# Local bin environment setup (Fallback validation)
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+# ==========================================
+# INTERACTIVE REAL-TIME AUTOCOMPLETE
+# ==========================================
+# Loads the zsh-autosuggestions plugin we cloned earlier
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh  
