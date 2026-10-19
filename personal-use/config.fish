@@ -4,6 +4,7 @@
 # Only run interactive configuration in interactive shells.
 # config.fish is normally sourced for interactive and non-interactive
 # Fish sessions, so guard interactive-only settings.
+set fish_greeting ""
 if not status is-interactive
     return
 end

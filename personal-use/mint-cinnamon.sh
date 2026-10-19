@@ -143,9 +143,6 @@ sudo sysctl --system > /dev/null
 sudo systemctl restart systemd-zram-setup@zram0.service
 
 # use native ntfsplus driver
-sudo apt remove ntfs-3g
-sudo dpkg-divert --package local --rename --add /sbin/mount.ntfs
-sudo apt install mint-meta-cinnamon mint-meta-core mintstick ntfs-3g
 echo 'defaults,uid=1000,gid=1000,fmask=0000,dmask=0022,windows_names,noatime'
 
 sudo tee /etc/udisks2/mount_options.conf > /dev/null <<EOF
