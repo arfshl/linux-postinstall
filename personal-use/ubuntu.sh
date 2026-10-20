@@ -114,9 +114,12 @@ sudo ufw allow 53317/udp
 sudo ufw allow 21118/tcp
 sudo ufw allow 21118/udp
 
-# enhance zram
+# Enable zram with zstd compression algorithm
+echo "Installing systemd-zram-generator ..."
+sudo apt install systemd-zram-generator -y
 echo "Enabling zram..."
-sudo tee -a /run/systemd/zram-generator.conf > /dev/null <<EOF
+[ -f /etc/systemd/zram-generator.conf ] && sudo rm /etc/systemd/zram-generator.conf
+sudo tee -a /etc/systemd/zram-generator.conf > /dev/null <<EOF
 [zram0]
 zram-size = min(ram, 16384)
 compression-algorithm = zstd

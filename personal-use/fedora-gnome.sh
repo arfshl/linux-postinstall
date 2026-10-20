@@ -82,10 +82,12 @@ sudo firewall-cmd --reload
 # install fdm localsend and flatseal flatpak
 flatpak install flathub org.localsend.localsend_app org.freedownloadmanager.Manager com.github.tchx84.Flatseal
 
-# enhance zram
+# Enable zram with zstd compression algorithm
+echo "Installing systemd-zram-generator ..."
+sudo apt install systemd-zram-generator -y
 echo "Enabling zram..."
-[ -f /usr/lib/systemd/zram-generator.conf ] && sudo rm /usr/lib/systemd/zram-generator.conf
-sudo tee -a /usr/lib/systemd/zram-generator.conf > /dev/null <<EOF
+[ -f /etc/systemd/zram-generator.conf ] && sudo rm /etc/systemd/zram-generator.conf
+sudo tee -a /etc/systemd/zram-generator.conf > /dev/null <<EOF
 [zram0]
 zram-size = min(ram, 16384)
 compression-algorithm = zstd
