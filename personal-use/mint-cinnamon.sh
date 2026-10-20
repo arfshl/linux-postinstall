@@ -153,6 +153,10 @@ sudo tee /etc/udisks2/mount_options.conf > /dev/null <<EOF
 ntfs_defaults=uid=$UID,gid=$GID
 EOF
 
+# remove unused packages
+
+sudo apt remove firefox thunderbird libreoffice* -y --autoremove
+
 # Enable swapfile with 4GB of size
 sudo fallocate -l 4G /swapfile1 && sudo chmod 600 /swapfile1 && sudo mkswap /swapfile1 && sudo swapon /swapfile1 && echo '/swapfile1 none swap sw 0 0' | sudo tee -a /etc/fstab
 
