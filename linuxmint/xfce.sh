@@ -51,7 +51,7 @@ echo "Installing VLC..."
 echo "Installing Microsoft fonts..."
 echo "Updating Mozilla Firefox..."
 echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
-sudo apt install vlc ttf-mscorefonts-installer cheese gnome-system-monitor gnome-clocks firefox software-properties-common software-properties-gtk -y
+sudo apt install vlc ttf-mscorefonts-installer cheese gnome-system-monitor gnome-clocks firefox software-properties-common software-properties-gtk yaru-cinnamon-theme-gtk yaru-cinnamon-theme-icon -y
 xdg-mime default vlc.desktop video/mp4
 xdg-mime default vlc.desktop video/x-matroska
 xdg-mime default vlc.desktop audio/mpeg
